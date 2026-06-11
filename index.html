@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATR Filial Recife</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{
+  --g:#7ec820;--gd:#4a8a08;--gl:#c8f060;--gf:#eafac0;--gb:#9ad430;
+  --o:#e07010;--ol:#f09030;--r:#cc2020;--y:#d4a000;
+  --gy:#444;--w:#fff;--bg:#f2fcd8;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;}
+body{background:var(--bg);color:var(--gy);min-height:100vh;}
+.pg{display:none;min-height:100vh;}
+.pg.on{display:block;}
+
+/* ======= LOGIN ======= */
+#pg-login{background:linear-gradient(150deg,#c8f060,#7ec820 60%,#4a8a08);}
+.lw{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.lb{background:#fff;border-radius:16px;padding:40px;width:100%;max-width:390px;
+  box-shadow:0 10px 40px rgba(74,138,8,.3);border-top:6px solid var(--g);}
+.llogo{background:linear-gradient(135deg,var(--gd),var(--g));color:#fff;
+  padding:18px 24px;border-radius:10px;text-align:center;margin-bottom:28px;}
+.llogo h2{font-size:1.5rem;font-weight:800;letter-spacing:1px;}
+.llogo p{font-size:.83rem;opacity:.85;margin-top:3px;}
+.lf{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;}
+.lf label{font-size:.83rem;font-weight:700;color:var(--gd);}
+.lf input{border:2px solid var(--gb);border-radius:8px;padding:11px 14px;
+  font-size:.97rem;background:#f6ffe6;transition:border .2s;letter-spacing:.5px;}
+.lf input:focus{outline:none;border-color:var(--gd);background:#fff;}
+.lf input.upper{text-transform:uppercase;}
+.lf input[type=password]{letter-spacing:3px;}
+.lerr{color:var(--r);font-size:.83rem;font-weight:600;text-align:center;
+  min-height:18px;margin-bottom:8px;}
+.btnl{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),var(--gd));
+  color:#fff;border:none;border-radius:9px;font-size:1rem;font-weight:700;
+  cursor:pointer;border-bottom:3px solid var(--gd);transition:all .2s;margin-top:2px;}
+.btnl:hover{background:linear-gradient(135deg,var(--gl),var(--g));color:#222;}
+.btnla{width:100%;padding:10px;background:transparent;color:var(--gd);
+  border:2px solid var(--gb);border-radius:8px;font-size:.87rem;font-weight:600;
+  cursor:pointer;margin-top:10px;transition:all .2s;}
+.btnla:hover{background:var(--gf);}
+
+/* ======= CAB ======= */
+.cab{background:linear-gradient(135deg,var(--gd),var(--g));color:#fff;
+  padding:12px 18px;display:flex;align-items:center;gap:10px;
+  border-bottom:3px solid var(--o);position:sticky;top:0;z-index:100;}
+.cab h1{font-size:1.2rem;font-weight:800;letter-spacing:.5px;}
+.cab .sub{font-size:.79rem;opacity:.85;}
+.cab-r{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.cab-u{background:rgba(255,255,255,.18);border-radius:6px;padding:3px 11px;
+  font-size:.8rem;font-weight:700;}
+.bvol{background:var(--o);color:#fff;border:none;padding:6px 14px;
+  border-radius:5px;cursor:pointer;font-weight:700;font-size:.83rem;transition:all .2s;}
+.bvol:hover{background:var(--ol);}
+.bsair{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);
+  padding:5px 12px;border-radius:5px;cursor:pointer;font-size:.8rem;font-weight:600;}
+.bsair:hover{background:rgba(255,255,255,.25);}
+
+/* ======= CONTEÚDO ======= */
+.ct{padding:16px;max-width:1500px;margin:0 auto;}
+.ncs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.nc{background:linear-gradient(135deg,var(--g),var(--gd));color:#fff;
+  border:none;padding:10px 17px;border-radius:7px;font-size:.86rem;
+  font-weight:700;cursor:pointer;border-bottom:3px solid var(--gd);transition:all .18s;}
+.nc:hover{background:linear-gradient(135deg,var(--o),var(--ol));transform:translateY(-1px);}
+
+/* ======= FORM CARD ======= */
+.fc{background:#fff;border-radius:10px;padding:18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.07);border-top:4px solid var(--g);margin-bottom:16px;}
+.fc h3{color:var(--gd);margin-bottom:14px;font-size:.98rem;}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:11px;}
+.ff{display:flex;flex-direction:column;gap:4px;}
+.ff label{font-size:.79rem;font-weight:700;color:var(--gd);}
+.ff input,.ff select,.ff textarea{border:1.5px solid var(--gb);border-radius:6px;
+  padding:7px 9px;font-size:.85rem;background:#f6ffe6;transition:border .2s;}
+.ff input:focus,.ff select:focus,.ff textarea:focus{outline:none;border-color:var(--gd);background:#fff;}
+
+/* ======= BOTÕES ======= */
+.btn{padding:8px 17px;border:none;border-radius:7px;font-size:.86rem;
+  font-weight:700;cursor:pointer;transition:all .18s;}
+.bg{background:var(--g);color:#fff;border-bottom:3px solid var(--gd);}
+.bg:hover{background:var(--gd);}
+.bo{background:var(--o);color:#fff;border-bottom:3px solid #a04000;}
+.bo:hover{background:var(--ol);}
+.br{background:var(--r);color:#fff;}
+.br:hover{background:#990000;}
+.brow{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px;}
+
+/* ======= TABELAS ======= */
+table{width:100%;border-collapse:collapse;font-size:.84rem;
+  background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+th{background:linear-gradient(135deg,var(--gd),var(--g));color:#fff;
+  padding:8px 6px;text-align:center;font-weight:700;font-size:.78rem;}
+td{padding:6px 5px;text-align:center;border-bottom:1px solid #e8f8c0;}
+tr:hover td{background:#f4fde8;}
+td input,td select,td textarea{border:1px solid var(--gb);border-radius:4px;
+  padding:3px 5px;font-size:.78rem;background:#f6ffe6;width:100%;}
+td textarea{resize:none;}
+
+/* ======= BADGES ======= */
+.bk{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.74rem;font-weight:700;}
+.bok{background:#d4f8b0;color:#2a6a00;}
+.bal{background:#fff3c0;color:#7a5000;}
+.bvn{background:#fde8e8;color:#990000;}
+
+/* ======= DATA ======= */
+.dd{background:linear-gradient(135deg,var(--gd),var(--g));color:#fff;
+  padding:8px 15px;border-radius:7px;font-size:.9rem;font-weight:700;
+  display:inline-block;margin-bottom:13px;}
+
+/* ======= HOME ======= */
+#pg-home{background:linear-gradient(160deg,#d8f880,#eafac0 60%,#f8fce8);}
+.hw{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100vh - 52px);gap:24px;padding:30px 20px;}
+.hlogo{background:linear-gradient(135deg,var(--gd),var(--g));color:#fff;
+  padding:22px 50px;border-radius:12px;text-align:center;
+  box-shadow:0 4px 20px rgba(74,138,8,.3);border:2px solid var(--gl);}
+.hlogo h1{font-size:1.9rem;font-weight:800;letter-spacing:1px;}
+.hlogo p{font-size:.88rem;opacity:.85;margin-top:4px;}
+.hbts{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+.hbt{background:linear-gradient(135deg,var(--g),var(--gd));color:#fff;border:none;
+  padding:20px 42px;border-radius:10px;font-size:1.05rem;font-weight:800;
+  cursor:pointer;box-shadow:0 4px 14px rgba(74,138,8,.25);
+  border-bottom:4px solid var(--gd);transition:all .2s;min-width:195px;letter-spacing:.5px;}
+.hbt:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(74,138,8,.35);
+  background:linear-gradient(135deg,var(--gl),var(--g));color:#222;}
+
+/* ======= ESCALA ======= */
+.esw{overflow-x:auto;}
+.est{min-width:1260px;}
+.est th{font-size:.74rem;padding:7px 3px;white-space:nowrap;}
+.est td{padding:3px 2px;vertical-align:top;}
+
+/* ======= MODAL ======= */
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);
+  z-index:1000;align-items:center;justify-content:center;}
+.mov.on{display:flex;}
+.mb{background:#fff;border-radius:13px;padding:26px;max-width:470px;width:95%;
+  box-shadow:0 8px 34px rgba(0,0,0,.22);border-top:5px solid var(--g);}
+.mb h3{color:var(--gd);margin-bottom:13px;font-size:1rem;}
+
+/* ======= ESCALAS SALVAS ======= */
+.ec{background:#fff;border-radius:8px;padding:12px 16px;
+  border-left:5px solid var(--g);margin-bottom:8px;
+  box-shadow:0 2px 7px rgba(0,0,0,.06);
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;transition:all .18s;}
+.ec:hover{border-left-color:var(--o);box-shadow:0 4px 14px rgba(0,0,0,.12);}
+.ec .ei{font-weight:700;color:var(--gd);font-size:.9rem;}
+.ec .es{font-size:.78rem;color:#666;margin-top:2px;}
+
+/* ======= TOAST ======= */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--gd);color:#fff;
+  padding:10px 22px;border-radius:8px;font-weight:700;font-size:.91rem;
+  box-shadow:0 4px 16px rgba(0,0,0,.2);opacity:0;transition:opacity .3s;
+  z-index:9999;pointer-events:none;}
+#toast.on{opacity:1;}
+
+@media(max-width:600px){
+  .hbts{flex-direction:column;}
+  .hbt{min-width:unset;width:100%;}
+  .fg{grid-template-columns:1fr;}
+  .lb{padding:28px 18px;}
+}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- =========================================================
+     LOGIN
+     ========================================================= -->
+<div id="pg-login" class="pg on">
+  <div class="lw">
+    <div class="lb">
+      <div class="llogo">
+        <h2>ATR FILIAL RECIFE</h2>
+        <p>Sistema de Gestão Operacional</p>
+      </div>
+      <div class="lf">
+        <label>LOGIN</label>
+        <input type="text" id="l-login" class="upper" maxlength="20" placeholder="SEU LOGIN"
+          oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')fazerLogin()">
+      </div>
+      <div class="lf">
+        <label>SENHA (8 dígitos)</label>
+        <input type="password" id="l-senha" maxlength="8" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')fazerLogin()">
+      </div>
+      <div class="lerr" id="l-err"></div>
+      <button class="btnl" onclick="fazerLogin()">ENTRAR</button>
+      <button class="btnla" onclick="abrirAdm()">Cadastrar Novo Usuário</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADM -->
+<div class="mov" id="mod-adm">
+  <div class="mb">
+    <h3>Acesso Administrador</h3>
+    <p style="font-size:.85rem;color:#666;margin-bottom:14px">
+      Informe as credenciais de administrador para acessar o cadastro de usuários.</p>
+    <div class="lf"><label>LOGIN ADM</label>
+      <input type="text" id="adm-l" class="upper" oninput="this.value=this.value.toUpperCase()" placeholder="LOGIN"></div>
+    <div class="lf"><label>SENHA ADM</label>
+      <input type="password" id="adm-s" placeholder="SENHA"
+        onkeydown="if(event.key==='Enter')validAdm()"></div>
+    <div class="lerr" id="adm-err"></div>
+    <div class="brow">
+      <button class="btn bg" onclick="validAdm()">Confirmar</button>
+      <button class="btn br" onclick="fmod('mod-adm')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     CADASTRO DE USUÁRIOS
+     ========================================================= -->
+<div id="pg-cad-users" class="pg">
+  <div class="cab">
+    <div><h1>CADASTRO DE USUÁRIOS</h1><div class="sub">Administrador do Sistema</div></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-login')">Voltar ao Login</button></div>
+  </div>
+  <div class="ct">
+    <div class="fc" style="max-width:460px">
+      <h3>Novo Usuário</h3>
+      <div class="fg">
+        <div class="ff" style="grid-column:1/-1">
+          <label>NOME / LOGIN (letras maiúsculas)</label>
+          <input type="text" id="nu-login" class="upper" maxlength="20"
+            placeholder="NOME DO USUÁRIO" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div class="ff">
+          <label>SENHA (exatamente 8 dígitos)</label>
+          <input type="password" id="nu-s1" maxlength="8" placeholder="••••••••">
+        </div>
+        <div class="ff">
+          <label>CONFIRMAR SENHA</label>
+          <input type="password" id="nu-s2" maxlength="8" placeholder="••••••••">
+        </div>
+      </div>
+      <div class="lerr" id="nu-err"></div>
+      <div class="brow"><button class="btn bg" onclick="cadUser()">Salvar Usuário</button></div>
+    </div>
+    <div class="fc">
+      <h3>Usuários Cadastrados</h3>
+      <table><thead><tr><th>Login</th><th>Ação</th></tr></thead>
+      <tbody id="tb-users"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     HOME
+     ========================================================= -->
+<div id="pg-home" class="pg">
+  <div class="cab">
+    <div><h1>ATR FILIAL RECIFE</h1><div class="sub">Sistema de Gestão Operacional</div></div>
+    <div class="cab-r">
+      <span class="cab-u" id="cu-home"></span>
+      <button class="bsair" onclick="sair()">Sair</button>
+    </div>
+  </div>
+  <div class="hw">
+    <div class="hlogo">
+      <h1>ATR FILIAL RECIFE</h1>
+      <p>Sistema de Gestão Operacional</p>
+    </div>
+    <div id="h-bv" style="font-size:.95rem;font-weight:600;color:var(--gd)"></div>
+    <div class="hbts">
+      <button class="hbt" onclick="ir('pg-estoque')">ESTOQUE</button>
+      <button class="hbt" onclick="ir('pg-docs')">GESTÃO DE DOCUMENTOS</button>
+      <button class="hbt" onclick="ir('pg-escala')">ESCALA</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     ESTOQUE GERAL
+     ========================================================= -->
+<div id="pg-estoque" class="pg">
+  <div class="cab">
+    <div><h1>ESTOQUE GERAL</h1><div class="sub">ATR Filial Recife</div></div>
+    <div class="cab-r"><span class="cab-u" id="cu-est"></span>
+      <button class="bvol" onclick="ir('pg-home')">Início</button>
+      <button class="bsair" onclick="sair()">Sair</button></div>
+  </div>
+  <div class="ct">
+    <div class="ncs">
+      <button class="nc" onclick="ir('pg-entrada')">Entrada de Produtos</button>
+      <button class="nc" onclick="ir('pg-saida')">Saída de Produtos</button>
+      <button class="nc" onclick="ir('pg-consulta-est')">Consulta de Estoque</button>
+      <button class="nc" onclick="ir('pg-novo-prod')">Novo Produto</button>
+    </div>
+    <div class="fc"><p style="color:#777;font-size:.9rem">Selecione uma opção acima para gerenciar o estoque.</p></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     ENTRADA DE PRODUTOS
+     ========================================================= -->
+<div id="pg-entrada" class="pg">
+  <div class="cab">
+    <div><h1>ENTRADA DE PRODUTOS</h1><div class="sub">Estoque Geral</div></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-estoque')">Voltar</button></div>
+  </div>
+  <div class="ct">
+    <div class="fc">
+      <h3>Registrar Entrada</h3>
+      <div class="fg">
+        <div class="ff"><label>Produto</label><select id="ep-pr"></select></div>
+        <div class="ff"><label>UND</label>
+          <select id="ep-un"><option value="">Selecione</option>
+          <option>UND</option><option>PÇ</option><option>PCT</option><option>FD</option><option>CX</option></select></div>
+        <div class="ff"><label>Setor</label>
+          <select id="ep-se"><option value="">Selecione</option>
+          <option>COPA</option><option>SECRETÁRIO</option><option>COZINHA</option>
+          <option>LIMPEZA</option><option>ALMOXARIFADO</option><option>DIVERSOS</option></select></div>
+        <div class="ff"><label>Quantidade</label>
+          <input type="number" id="ep-qt" min="1" placeholder="0"></div>
+        <div class="ff"><label>Data da Entrada</label>
+          <input type="date" id="ep-dt"></div>
+        <div class="ff"><label>Valor Unitário (R$)</label>
+          <input type="number" id="ep-vl" min="0" step="0.01" placeholder="0,00"></div>
+      </div>
+      <div class="brow">
+        <button class="btn bg" onclick="regEntrada()">Registrar Entrada</button>
+        <button class="btn bo" onclick="ir('pg-estoque')">Cancelar</button>
+      </div>
+    </div>
+    <div class="fc"><h3>Histórico de Entradas</h3>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Data</th><th>Produto</th><th>UND</th><th>Setor</th>
+          <th>Qtd</th><th>Vlr.Unit</th><th>Total</th></tr></thead>
+        <tbody id="tb-ents"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     SAÍDA DE PRODUTOS
+     ========================================================= -->
+<div id="pg-saida" class="pg">
+  <div class="cab">
+    <div><h1>SAÍDA DE PRODUTOS</h1><div class="sub">Estoque Geral</div></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-estoque')">Voltar</button></div>
+  </div>
+  <div class="ct">
+    <div class="fc">
+      <h3>Registrar Saída</h3>
+      <div class="fg">
+        <div class="ff"><label>Produto</label><select id="sp-pr"></select></div>
+        <div class="ff"><label>UND</label>
+          <select id="sp-un"><option value="">Selecione</option>
+          <option>UND</option><option>PÇ</option><option>PCT</option><option>FD</option><option>CX</option></select></div>
+        <div class="ff"><label>Quantidade</label>
+          <input type="number" id="sp-qt" min="1" placeholder="0"></div>
+        <div class="ff"><label>Data de Saída</label>
+          <input type="date" id="sp-dt"></div>
+        <div class="ff"><label>Solicitante</label>
+          <input type="text" id="sp-sl" placeholder="Nome do solicitante"></div>
+      </div>
+      <div class="brow">
+        <button class="btn bg" onclick="regSaida()">Registrar Saída</button>
+        <button class="btn bo" onclick="ir('pg-estoque')">Cancelar</button>
+      </div>
+    </div>
+    <div class="fc"><h3>Histórico de Saídas</h3>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Data</th><th>Produto</th><th>UND</th>
+          <th>Qtd</th><th>Solicitante</th></tr></thead>
+        <tbody id="tb-sais"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     CONSULTA ESTOQUE
+     ========================================================= -->
+<div id="pg-consulta-est" class="pg">
+  <div class="cab">
+    <div><h1>CONSULTA DE ESTOQUE</h1><div class="sub">Estoque Geral</div></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-estoque')">Voltar</button></div>
+  </div>
+  <div class="ct">
+    <div class="brow" style="margin-bottom:14px">
+      <button class="btn bo" onclick="pdfEstoque()">Gerar Relatório PDF</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Produto</th><th>Qtd Atual</th>
+        <th>Vlr.Unitário</th><th>Vlr.Total</th><th>Status</th></tr></thead>
+      <tbody id="tb-cest"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     NOVO PRODUTO
+     ========================================================= -->
+<div id="pg-novo-prod" class="pg">
+  <div class="cab">
+    <div><h1>NOVO PRODUTO</h1><div class="sub">Estoque Geral</div></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-estoque')">Voltar</button></div>
+  </div>
+  <div class="ct">
+    <div class="fc" style="max-width:520px">
+      <h3>Cadastrar Produto</h3>
+      <div class="fg">
+        <div class="ff" style="grid-column:1/-1">
+          <label>Nome do Produto</label>
+          <input type="text" id="np-nm" placeholder="Nome completo"
+            oninput="this.value=this.value.toUpperCase()"></div>
+        <div class="ff"><label>UND</label>
+          <select id="np-un"><option value="">Selecione</option>
+          <option>UND</option><option>PÇ</option><option>PCT</option><option>FD</option><option>CX</option></select></div>
+        <div class="ff"><label>Setor</label>
+          <select id="np-se"><option value="">Selecione</option>
+          <option>COPA</option><option>SECRETÁRIO</option><option>COZINHA</option>
+          <option>LIMPEZA</option><option>ALMOXARIFADO</option><option>DIVERSOS</option></select></div>
+      </div>
+      <div class="brow"><button class="btn bg" onclick="cadProd()">Salvar Produto</button></div>
+    </div>
+    <div class="fc"><h3>Produtos Cadastrados</h3>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Produto</th><th>UND</th><th>Setor</th><th>Ação</th></tr></thead>
+        <tbody id="tb-prods"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     GESTÃO DE DOCUMENTOS
+     ========================================================= -->
+<div id="pg-docs" class="pg">
+  <div class="cab">
+    <div><h1>GESTÃO DE DOCUMENTOS – FILIAL RECIFE</h1><div class="sub">ATR Filial Recife</div></div>
+    <div class="cab-r"><span class="cab-u" id="cu-doc"></span>
+      <button class="bvol" onclick="ir('pg-home')">Início</button>
+      <button class="bsair" onclick="sair()">Sair</button></div>
+  </div>
+  <div class="ct">
+    <div class="dd" id="dd-hoje"></div>
+    <div class="fc">
+      <div style="overflow-x:auto">
+        <table id="tbl-docs">
+          <thead><tr>
+            <th style="min-width:215px;text-align:left;padding-left:10px">LICENÇA</th>
+            <th style="min-width:145px">VALIDADE</th>
+            <th style="min-width:120px">DIAS QUE FALTAM</th>
+            <th style="min-width:125px">MARGEM (dias)</th>
+            <th style="min-width:135px">SOLICITAR EM</th>
+          </tr></thead>
+          <tbody id="tb-docs"></tbody>
+        </table>
+      </div>
+      <div class="brow" style="margin-top:16px">
+        <button class="btn bg" onclick="savDocs()">Salvar</button>
+        <button class="btn bo" onclick="ir('pg-estoque')">Ir para Estoque Geral</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     ESCALA
+     ========================================================= -->
+<div id="pg-escala" class="pg">
+  <div class="cab">
+    <div><h1>ESCALA</h1><div class="sub">ATR Filial Recife</div></div>
+    <div class="cab-r"><span class="cab-u" id="cu-esc"></span>
+      <button class="bvol" onclick="ir('pg-home')">Início</button>
+      <button class="bsair" onclick="sair()">Sair</button></div>
+  </div>
+  <div class="ct">
+    <div class="ncs">
+      <button class="nc" onclick="ir('pg-consulta-esc')">Consulta de Escala</button>
+      <button class="nc" onclick="ir('pg-mot')">Novo Motorista</button>
+      <button class="nc" onclick="ir('pg-vt')">Nova VT</button>
+      <button class="nc" onclick="ir('pg-placa')">Nova Placa</button>
+    </div>
+
+    <!-- Cabeçalho data -->
+    <div class="fc">
+      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end">
+        <div class="ff">
+          <label>Data da Escala</label>
+          <input type="date" id="esc-dt" oninput="calcDia()" style="width:158px">
+        </div>
+        <div class="ff">
+          <label>Dia da Semana</label>
+          <input type="text" id="esc-dia" readonly
+            style="width:148px;background:#e8fca0;font-weight:800;color:var(--gd);text-align:center">
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela escala -->
+    <div class="fc">
+      <div class="esw">
+        <table class="est" id="tbl-esc">
+          <thead><tr>
+            <th style="width:58px">VT</th>
+            <th style="width:88px">PLACA</th>
+            <th style="width:148px">MOTORISTA</th>
+            <th style="width:76px">HORÁRIO</th>
+            <th style="width:60px">VIAGEM</th>
+            <th style="width:66px">OTR</th>
+            <th style="width:134px">CLIENTE</th>
+            <th style="width:168px">EQUIPAMENTO</th>
+            <th style="width:144px">DESTINO</th>
+            <th style="width:260px">OBSERVAÇÕES</th>
+          </tr></thead>
+          <tbody id="corp-esc"></tbody>
+        </table>
+      </div>
+      <div class="ff" style="margin-top:13px">
+        <label>Observações Gerais da Escala (máx. 400 caracteres)</label>
+        <textarea id="esc-obs" maxlength="400" rows="4"
+          style="width:100%;max-width:920px;border:1.5px solid var(--gb);
+          border-radius:6px;padding:8px;font-size:.86rem;background:#f6ffe6"></textarea>
+      </div>
+    </div>
+
+    <div class="brow">
+      <button class="btn bg" onclick="novaEscala()">Nova Escala</button>
+      <button class="btn bg" onclick="addLinha()">+ Linha</button>
+      <button class="btn bg" onclick="savEscala()">Salvar Escala</button>
+      <button class="btn bo" onclick="pdfEscala(null)">Gerar PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     CONSULTA DE ESCALA
+     ========================================================= -->
+<div id="pg-consulta-esc" class="pg">
+  <div class="cab">
+    <div><h1>CONSULTA DE ESCALA</h1><div class="sub">ATR Filial Recife</div></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-escala')">Voltar</button></div>
+  </div>
+  <div class="ct" id="lista-esc"></div>
+</div>
+
+<!-- MODAL ESCALA SALVA -->
+<div class="mov" id="mod-esc">
+  <div class="mb">
+    <h3>Escala Salva</h3>
+    <div id="mod-esc-info"></div>
+    <div class="brow" style="margin-top:14px">
+      <button class="btn bg" onclick="editEsc()">Editar</button>
+      <button class="btn bo" onclick="pdfEscMod()">Gerar PDF</button>
+      <button class="btn br" onclick="fmod('mod-esc')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     NOVO MOTORISTA
+     ========================================================= -->
+<div id="pg-mot" class="pg">
+  <div class="cab"><div><h1>NOVO MOTORISTA</h1></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-escala')">Voltar</button></div></div>
+  <div class="ct">
+    <div class="fc" style="max-width:400px">
+      <h3>Cadastrar Motorista</h3>
+      <div class="ff"><label>Nome</label>
+        <input type="text" id="nm-n" placeholder="Nome completo"
+          oninput="this.value=this.value.toUpperCase()"></div>
+      <div class="brow"><button class="btn bg" onclick="cadMot()">Salvar</button></div>
+    </div>
+    <div class="fc"><h3>Motoristas</h3>
+      <table><thead><tr><th>Nome</th><th>Ação</th></tr></thead>
+      <tbody id="tb-mots"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     NOVA VT
+     ========================================================= -->
+<div id="pg-vt" class="pg">
+  <div class="cab"><div><h1>NOVA VT</h1></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-escala')">Voltar</button></div></div>
+  <div class="ct">
+    <div class="fc" style="max-width:400px">
+      <h3>Cadastrar VT</h3>
+      <div class="ff"><label>Número da VT</label>
+        <input type="text" id="nvt-n" placeholder="Ex: 50"></div>
+      <div class="brow"><button class="btn bg" onclick="cadVT()">Salvar</button></div>
+    </div>
+    <div class="fc"><h3>VTs Cadastradas</h3>
+      <table><thead><tr><th>VT</th><th>Placa Associada</th><th>Ação</th></tr></thead>
+      <tbody id="tb-vts"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     NOVA PLACA
+     ========================================================= -->
+<div id="pg-placa" class="pg">
+  <div class="cab"><div><h1>NOVA PLACA</h1></div>
+    <div class="cab-r"><button class="bvol" onclick="ir('pg-escala')">Voltar</button></div></div>
+  <div class="ct">
+    <div class="fc" style="max-width:420px">
+      <h3>Cadastrar / Atualizar Placa</h3>
+      <div class="ff"><label>VT Associada</label><select id="npl-vt"></select></div>
+      <div class="ff" style="margin-top:10px"><label>Placa</label>
+        <input type="text" id="npl-pl" maxlength="8" placeholder="Ex: ABC1D23"
+          oninput="this.value=this.value.toUpperCase()"></div>
+      <div class="brow"><button class="btn bg" onclick="cadPlaca()">Salvar</button></div>
+    </div>
+    <div class="fc"><h3>Placas Cadastradas</h3>
+      <table><thead><tr><th>VT</th><th>Placa</th><th>Ação</th></tr></thead>
+      <tbody id="tb-placas"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+<script>
+// ============================================================
+// DADOS FIXOS
+// ============================================================
+const PRODS0 = [
+  "CLIPS ECCO Nº 04 50 UND","COLA BASTÃO 40G ONDA","COLA INSTANTENEA 793 TEKBOND 20G",
+  "ENVELOPES PERSONALIZADOS ATR","ESTOJO DE MARCADORES WHITE BOARD",
+  "FITA ADESIVA CREPE 48X50 EUROCEL","FURADOR DE PAPEL MAPED OFFICE",
+  "GRAMPEADOR METAL 11,5 CM 25 FOLHAS JOCAROFFICE",
+  "GRAMPEADOR METAL 11,5 CM 25 FOLHAS MASTERPRINT",
+  "GRAMPO GALVANIZADO BW 26/6 5000 UND","MARCADOR P/ QUADRO BR AZUL MASTERPRINT",
+  "MARCADOR P/ QUADRO BR PRETO MASTERPRINT","MARCADOR P/ QUADRO BR VERDE MASTERPRINT",
+  "MARCADOR P/ QUADRO BR VERMELHO MASTERPRINT","MARCADOR P/ RETRO PROJETOR AZUL",
+  "MARCADOR P/ RETRO PROJETOR VERMELHO","MARCADOR RECARREGÁVEL PRETO PILOT",
+  "PAPEL A4 SULFITE 75G SUZANO","PRANCHETA ACRÍLICO OFICIO PRENDEDOR METAL","RÉGUA",
+  "TINTA REFIL BULK M504/544 YELLOW MASTERPRINT","TINTA REFIL BULK MP04/44 BLACK MASTERPRINT",
+  "TINTA REFIL BULK MP04/44 CYAN MASTERPRINT","TINTA REFIL BULK MP04/44 MARGENTA MASTERPRINT",
+  "AEROSOL BAYGON AÇÃO TOTAL 360ML","AEROSOL LIMPA CONTATOS",
+  "AEROSOL PODEROSO 400ML MATA BARATA","AEROSOL RAID ESSENCIAL",
+  "AIR CLEAN FLORAL SL QUIMILAR","ALCOOL LÍQUIDO 70% SL FACILITA",
+  "AR GRADÁVEL AEROSOL 400ML CHÁ BRANCO","CADEADO PADO LT 3000L",
+  "CLORO ATIVO 2% SL VALENÇA","DESINFETANTE COM CAPIM LIMÃO 5L VALENÇA",
+  "DETERGENTE LAVA LOUÇA NEUTRO 5L VALENÇA","DISCO DE CORTE STARRETT 4POL",
+  "ELEMENTO AR PRIMARIO","ELEMENTO COMB","ELEMENTO LUBRIF",
+  "ELETRODO 6013 2,50MM - VONDER","ESPONJA MULT PROF IONS DE PRATA 9410 BETTAN",
+  "ESPONJA MULTI USO","FITA ISOLANTE 18MM X 20MM - IMPERIAL",
+  "FLANELA 28X48 AMARELA LIMPOTEX","GOTAS PERFUMADAS PIMENTA ROSA 140ML DEOLINE",
+  "JOGO DE CHAVE BOLA C/09 PRETA CURTA PRIM","LÂMPADA 67 24V","LÂMPADA PINGÃO 24V",
+  "LIMPA CONTATO 300ML - PRATIK","LIMPA CONTATOS 300ML - ORBI","LIMPA VIDROS 5L VALENÇA",
+  "MÃO DE OBRA","NAFTALINA VALENCA 24G",
+  "OLEO 15W40 - C14 - KARTER TRUCK TURBO - BALDE 20LT",
+  "OLEO 15W40 C14 KARTER TRUCK TURBO BALDE 20L","OLEO 80 - GL4 - KARTER GEAR OIL K-80 1LT",
+  "PANO DE CHÃO FLANELADO TIPO C 40X62 LIMPOTEX","PAPEL HIGIÊNICO PCT 12 SUBLIME",
+  "PAPEL HIGIÊNICO PCT 12 VELUD","PASTILHA SANITÁRIA TRID-D LAVANDA 30G",
+  "PF RM BOLEADA FENDA 5/32 X 2 NC ZB","PF RM PANELA PHILIPS 4 X 25 BC",
+  "PF SEXT FLANG 8.8 10 X 40 MA RT","PF SEXT FLANG 8.8 8 X 25 MA RT - CH13",
+  "PM CAMINHÃO 275/80 R22.5 BXM1 L CONTI F 3824 D 3824",
+  "PM CAMINHÃO 275/80 R22.5 BXM1 L GOODY F 2322 D 48242322",
+  "PM CAMINHÃO 275/80 R22.5 BXM1 L IMPOR F 4824 D 4824",
+  "PM CAMINHÃO 275/80 R22.5 BXM1 L SPEED F 5023 D 5023",
+  "PORCA SEXT 04 MA ZB - CH7","PORCA SEXT 12 MA ZB - CH19","PORCA SEXT POLEG 5/32 NC ZB",
+  "PORTA ELETROLDO SIGMA 1000A CD2567 - LOTUS","ROLO EPOXY RESIPRO 09CM C/CABO - ROMA",
+  "ROLO POLIESTER 9CM ANTIRRESP CB 822 09 ROMA","SABÃO EM PÓ BEM TE VI TRAD. 400G",
+  "SABONETE LIQUIDO BRANCO ERVA DOCE 5L","SOQUETE PISCA","TARUGO GONZO TORNEADO 3/4 PL",
+  "THINNER 4,5 LITROS - REPARAUTO","TINTA LATA 3,6L ESMALTE INDUSTRIAL VERDE POLIDOR",
+  "TINTA LATA 3L MADEIRAS E METAIS CINZ IQUINE","TINTA SPRAY PRATIK 400ML/190G / AMARELO",
+  "TINTA SPRAY PRATIK 400ML/190G / BRANCO","TINTA SPRAY PRATIK 400ML/190G / PRETO",
+  "TINTA SPRAY VERDE CLARO 400ML/190G","TOALHA DE PAPEL ELITE 21X20 1000FLS",
+  "TOALHA DE PAPEL KAMI 18X19 1000FLS","TOALHA DE PAPEL NOBRE 23X20 1000FLS",
+  "TOMADA 1S 2P+T 20A 250V ARIA","TORNEIRA JARDIM PLAST 1/2E3/4 BIC PT - REBOUCAS",
+  "TRINCHA 312 1 POL - ROMA","VORAZ AL300 5L DESENGRAXANTE QUIMILAB","ZARÇÃO REPARAUTO 3,6 CINZA"
+];
+
+const DESTINOS = [
+  "CTR-CANDEIAS","UTM","CTR-PE","UBA","LARA CENTRAL","PB AMBIENTAL",
+  "ECOBRAS","DS DE FRANCA","GA AMBIENTAL","RCC AMBIENTAL","BOVIL",
+  "CTR CARUARU","ENTREGA","RECOLHIMENTO"
+];
+
+const VTP0 = {
+  "25":"RLV4A36","26":"RLZ9D94","31":"SIH5D09","34":"JCV4J66","38":"TTV6D88",
+  "32":"SYP9D80","39":"TEP2I76","44":"ELX1A42","24":"RLT2114","45":"UBR6D73"
+};
+
+const MOTS0 = [
+  "ISAIAS SESINO","MARCELO DA SILVA","FLÁVIO CLEITON",
+  "MÁRIO ROBERTO","RENATO TEODISIO","AGENOR CALADO","NILSON JOSÉ"
+];
+
+const LICENCAS = [
+  "LICENÇA SIMPLIFICADA","ALVARÁ DE LOCALIZAÇÃO","BOMBEIRO REGULARIDADE",
+  "BOMBEIRO CONTRA INCÊNDIO","LICENÇA DE OPERAÇÃO CPRH","EMLURB",
+  "CADASTROS TÉCNICOS FEDERAIS","MINISTÉRIO DO MEIO AMBIENTE","SISTEMA MTR","AUTORIZAÇÃO CR – IBAMA"
+];
+
+const ADM = {l:"ADM", s:"123456"};
+
+// ============================================================
+// STORAGE
+// ============================================================
+const ls = k => { try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; }};
+const ss = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+
+const gProds = () => ls('p') || PRODS0;
+const gEst   = () => ls('e') || {};
+const gEnts  = () => ls('en') || [];
+const gSais  = () => ls('sa') || [];
+const gMots  = () => ls('mo') || [...MOTS0];
+const gVTs   = () => ls('vt') || Object.keys(VTP0);
+const gPls   = () => ls('pl') || {...VTP0};
+const gEscs  = () => ls('esc') || [];
+const gDocs  = () => ls('doc') || {};
+const gUsers = () => ls('us') || [];
+
+// ============================================================
+// AUTH
+// ============================================================
+let USR = null;
+
+function fazerLogin(){
+  const l = document.getElementById('l-login').value.trim();
+  const s = document.getElementById('l-senha').value;
+  document.getElementById('l-err').textContent = '';
+  if(!l||!s){ document.getElementById('l-err').textContent='Preencha login e senha.'; return; }
+  if(l===ADM.l && s===ADM.s){ USR=l; entrar(); return; }
+  const u = gUsers().find(x=>x.l===l && x.s===s);
+  if(u){ USR=l; entrar(); return; }
+  document.getElementById('l-err').textContent='Login ou senha incorretos.';
+}
+
+function entrar(){
+  document.getElementById('l-login').value='';
+  document.getElementById('l-senha').value='';
+  document.getElementById('l-err').textContent='';
+  ['cu-home','cu-est','cu-doc','cu-esc'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent=USR;
+  });
+  document.getElementById('h-bv').textContent='Bem-vindo, '+USR;
+  ir('pg-home');
+}
+
+function sair(){ USR=null; ir('pg-login'); }
+
+function abrirAdm(){
+  document.getElementById('adm-l').value='';
+  document.getElementById('adm-s').value='';
+  document.getElementById('adm-err').textContent='';
+  document.getElementById('mod-adm').classList.add('on');
+}
+
+function validAdm(){
+  const l=document.getElementById('adm-l').value.trim();
+  const s=document.getElementById('adm-s').value;
+  if(l===ADM.l && s===ADM.s){
+    fmod('mod-adm'); ir('pg-cad-users'); rndUsers();
+  } else {
+    document.getElementById('adm-err').textContent='Credenciais incorretas.';
+  }
+}
+
+function cadUser(){
+  const login=document.getElementById('nu-login').value.trim();
+  const s1=document.getElementById('nu-s1').value;
+  const s2=document.getElementById('nu-s2').value;
+  const err=document.getElementById('nu-err');
+  err.textContent='';
+  if(!login){ err.textContent='Informe o nome/login.'; return; }
+  if(s1.length!==8){ err.textContent='A senha deve ter exatamente 8 dígitos.'; return; }
+  if(s1!==s2){ err.textContent='As senhas não coincidem.'; return; }
+  if(login==='ADM'){ err.textContent='Login reservado ao administrador.'; return; }
+  const users=gUsers();
+  if(users.find(u=>u.l===login)){ err.textContent='Login já cadastrado.'; return; }
+  users.push({l:login,s:s1}); ss('us',users);
+  document.getElementById('nu-login').value='';
+  document.getElementById('nu-s1').value='';
+  document.getElementById('nu-s2').value='';
+  toast('Usuário cadastrado com sucesso!'); rndUsers();
+}
+
+function rndUsers(){
+  const tb=document.getElementById('tb-users');
+  const list=gUsers();
+  if(!list.length){
+    tb.innerHTML='<tr><td colspan="2" style="color:#aaa;padding:13px">Nenhum usuário cadastrado</td></tr>';
+    return;
+  }
+  tb.innerHTML=list.map((u,i)=>`<tr><td>${u.l}</td>
+    <td><button class="btn br" style="padding:3px 9px;font-size:.76rem"
+      onclick="rmUser(${i})">Remover</button></td></tr>`).join('');
+}
+
+function rmUser(i){
+  const u=gUsers(); u.splice(i,1); ss('us',u);
+  rndUsers(); toast('Usuário removido.');
+}
+
+// ============================================================
+// NAVEGAÇÃO
+// ============================================================
+function ir(pg){
+  if(!USR && pg!=='pg-login' && pg!=='pg-cad-users'){ ir('pg-login'); return; }
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById(pg).classList.add('on');
+  window.scrollTo(0,0);
+  const map = {
+    'pg-entrada':   inicEntrada,
+    'pg-saida':     inicSaida,
+    'pg-consulta-est': rndCEst,
+    'pg-novo-prod': rndProds,
+    'pg-docs':      inicDocs,
+    'pg-escala':    inicEscala,
+    'pg-consulta-esc': rndCEsc,
+    'pg-mot':       rndMots,
+    'pg-vt':        rndVTs,
+    'pg-placa':     rndPlacas,
+    'pg-cad-users': rndUsers
+  };
+  if(map[pg]) map[pg]();
+}
+
+// ============================================================
+// TOAST / MODAL
+// ============================================================
+function toast(msg, c='var(--gd)'){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.background=c;
+  t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2800);
+}
+function fmod(id){ document.getElementById(id).classList.remove('on'); }
+
+// ============================================================
+// HELPERS
+// ============================================================
+function fillSel(el,list,empty='Selecione'){
+  el.innerHTML=`<option value="">${empty}</option>`;
+  list.forEach(v=>{ const o=document.createElement('option'); o.value=v; o.textContent=v; el.appendChild(o); });
+}
+function fmtD(d){
+  if(!d) return '—';
+  if(d.includes('-')){ const p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+  return d;
+}
+
+// ============================================================
+// ENTRADA
+// ============================================================
+function inicEntrada(){
+  fillSel(document.getElementById('ep-pr'), gProds());
+  rndEnts();
+  const h=new Date().toISOString().split('T')[0];
+  document.getElementById('ep-dt').value=h;
+}
+function regEntrada(){
+  const p=document.getElementById('ep-pr').value;
+  const un=document.getElementById('ep-un').value;
+  const se=document.getElementById('ep-se').value;
+  const qt=parseInt(document.getElementById('ep-qt').value)||0;
+  const dt=document.getElementById('ep-dt').value;
+  const vl=parseFloat(document.getElementById('ep-vl').value)||0;
+  if(!p||!qt||!dt){ toast('Preencha os campos obrigatórios','var(--r)'); return; }
+  const ens=gEnts(); ens.push({p,un,se,qt,dt,vl}); ss('en',ens);
+  const est=gEst();
+  if(!est[p]) est[p]={qt:0,vl:0};
+  est[p].qt+=qt; est[p].vl=vl; ss('e',est);
+  toast('Entrada registrada!');
+  document.getElementById('ep-qt').value='';
+  document.getElementById('ep-vl').value='';
+  rndEnts();
+}
+function rndEnts(){
+  const tb=document.getElementById('tb-ents');
+  const list=gEnts().slice().reverse();
+  tb.innerHTML=list.map(e=>`<tr>
+    <td>${fmtD(e.dt)}</td><td style="text-align:left;padding-left:6px">${e.p}</td>
+    <td>${e.un||'-'}</td><td>${e.se||'-'}</td><td><b>${e.qt}</b></td>
+    <td>R$ ${(e.vl||0).toFixed(2)}</td>
+    <td>R$ ${((e.vl||0)*e.qt).toFixed(2)}</td></tr>`).join('')
+    ||'<tr><td colspan="7" style="color:#aaa;padding:13px">Sem registros</td></tr>';
+}
+
+// ============================================================
+// SAÍDA
+// ============================================================
+function inicSaida(){
+  fillSel(document.getElementById('sp-pr'), gProds());
+  rndSais();
+  const h=new Date().toISOString().split('T')[0];
+  document.getElementById('sp-dt').value=h;
+}
+function regSaida(){
+  const p=document.getElementById('sp-pr').value;
+  const un=document.getElementById('sp-un').value;
+  const qt=parseInt(document.getElementById('sp-qt').value)||0;
+  const dt=document.getElementById('sp-dt').value;
+  const sl=document.getElementById('sp-sl').value;
+  if(!p||!qt||!dt){ toast('Preencha os campos obrigatórios','var(--r)'); return; }
+  const est=gEst();
+  if(!est[p]||est[p].qt<qt){ toast('Estoque insuficiente!','var(--r)'); return; }
+  const sas=gSais(); sas.push({p,un,qt,dt,sl}); ss('sa',sas);
+  est[p].qt-=qt; ss('e',est);
+  toast('Saída registrada!');
+  document.getElementById('sp-qt').value='';
+  document.getElementById('sp-sl').value='';
+  rndSais();
+}
+function rndSais(){
+  const tb=document.getElementById('tb-sais');
+  const list=gSais().slice().reverse();
+  tb.innerHTML=list.map(s=>`<tr>
+    <td>${fmtD(s.dt)}</td><td style="text-align:left;padding-left:6px">${s.p}</td>
+    <td>${s.un||'-'}</td><td><b>${s.qt}</b></td><td>${s.sl||'-'}</td></tr>`).join('')
+    ||'<tr><td colspan="5" style="color:#aaa;padding:13px">Sem registros</td></tr>';
+}
+
+// ============================================================
+// CONSULTA ESTOQUE
+// ============================================================
+function rndCEst(){
+  const tb=document.getElementById('tb-cest');
+  const est=gEst(); const prods=gProds(); let tot=0;
+  const rows=prods.map(p=>{
+    const e=est[p]||{qt:0,vl:0};
+    const total=(e.vl||0)*e.qt; tot+=total;
+    return {p,qt:e.qt,vl:e.vl||0,total,low:e.qt<2};
+  });
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td style="text-align:left;padding-left:8px">${r.p}</td>
+    <td><b>${r.qt}</b></td>
+    <td>R$ ${r.vl.toFixed(2)}</td>
+    <td>R$ ${r.total.toFixed(2)}</td>
+    <td>${r.low?'<span class="bk bal">ABAIXO DO MÍNIMO</span>':'<span class="bk bok">OK</span>'}</td></tr>`).join('');
+  tb.innerHTML+=`<tr style="background:var(--gf);font-weight:700">
+    <td style="text-align:left;padding-left:8px">TOTAL GERAL</td>
+    <td>—</td><td>—</td><td>R$ ${tot.toFixed(2)}</td><td>—</td></tr>`;
+}
+
+function pdfEstoque(){
+  const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'landscape'});
+  doc.setFontSize(13); doc.text('ATR FILIAL RECIFE – RELATÓRIO DE ESTOQUE',14,13);
+  doc.setFontSize(8); doc.text('Gerado em: '+new Date().toLocaleDateString('pt-BR'),14,20);
+  const est=gEst(); const prods=gProds(); let tot=0; const rows=[];
+  prods.forEach(p=>{
+    const e=est[p]||{qt:0,vl:0};
+    if(e.qt>0){
+      const t=(e.vl||0)*e.qt; tot+=t;
+      rows.push([p,e.qt,'R$ '+e.vl.toFixed(2),'R$ '+t.toFixed(2),e.qt<2?'BAIXO':'OK']);
+    }
+  });
+  rows.push(['TOTAL GERAL','','','R$ '+tot.toFixed(2),'']);
+  doc.autoTable({startY:24,head:[['Produto','Qtd','Vlr.Unit','Vlr.Total','Status']],body:rows,
+    styles:{fontSize:7.5},headStyles:{fillColor:[74,138,8]},
+    columnStyles:{0:{cellWidth:118},1:{cellWidth:18},2:{cellWidth:26},3:{cellWidth:26},4:{cellWidth:20}}});
+  doc.save('Estoque_ATR_Recife.pdf');
+}
+
+// ============================================================
+// NOVO PRODUTO
+// ============================================================
+function cadProd(){
+  const nm=document.getElementById('np-nm').value.trim();
+  if(!nm){ toast('Informe o nome','var(--r)'); return; }
+  const ps=gProds();
+  if(ps.includes(nm)){ toast('Produto já cadastrado','var(--y)'); return; }
+  ps.push(nm); ss('p',ps);
+  document.getElementById('np-nm').value='';
+  toast('Produto cadastrado!'); rndProds();
+}
+function rndProds(){
+  const tb=document.getElementById('tb-prods');
+  const ps=gProds(); const base=PRODS0.length;
+  tb.innerHTML=ps.map((p,i)=>`<tr>
+    <td style="text-align:left;padding-left:6px">${p}</td><td>—</td><td>—</td>
+    <td>${i>=base
+      ?`<button class="btn br" style="padding:3px 8px;font-size:.74rem"
+          onclick="rmProd('${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">Remover</button>`
+      :'<span style="color:#aaa;font-size:.74rem">Padrão</span>'}</td></tr>`).join('');
+}
+function rmProd(nm){
+  let ps=gProds().filter(p=>p!==nm); ss('p',ps);
+  rndProds(); toast('Produto removido.');
+}
+
+// ============================================================
+// GESTÃO DE DOCUMENTOS
+// ============================================================
+function inicDocs(){
+  const hoje=new Date();
+  document.getElementById('dd-hoje').textContent='Hoje: '+hoje.toLocaleDateString('pt-BR',
+    {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const docs=gDocs();
+  const tb=document.getElementById('tb-docs');
+  tb.innerHTML=LICENCAS.map((lic,i)=>{
+    const d=docs[lic]||{val:'',mg:''};
+    return `<tr id="dr${i}">
+      <td style="text-align:left;font-weight:700;padding:7px 10px;white-space:nowrap">${lic}</td>
+      <td><input type="text" id="dv${i}" value="${d.val}" placeholder="DD/MM/AAAA"
+        maxlength="10" oninput="calcDoc(${i})" style="width:125px;text-align:center"></td>
+      <td id="dd${i}" style="font-weight:700;font-size:.83rem"></td>
+      <td><input type="number" id="dm${i}" value="${d.mg}" placeholder="dias"
+        oninput="calcDoc(${i})" style="width:72px;text-align:center"></td>
+      <td id="ds${i}" style="font-weight:700;font-size:.83rem"></td>
+    </tr>`;
+  }).join('');
+  LICENCAS.forEach((_,i)=>calcDoc(i));
+}
+
+function calcDoc(i){
+  const vs=document.getElementById('dv'+i).value;
+  const mg=parseInt(document.getElementById('dm'+i).value)||0;
+  const ddEl=document.getElementById('dd'+i);
+  const dsEl=document.getElementById('ds'+i);
+  const row=document.getElementById('dr'+i);
+  if(!vs||vs.length<10){ ddEl.textContent=''; dsEl.textContent=''; row.style.background=''; return; }
+  const pts=vs.split('/');
+  if(pts.length!==3){ ddEl.textContent='Inválida'; return; }
+  const vd=new Date(pts[2],pts[1]-1,pts[0]);
+  if(isNaN(vd.getTime())){ ddEl.textContent='Inválida'; return; }
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const diff=Math.round((vd-hoje)/(864e5));
+  ddEl.textContent=diff>=0?diff+' dias':'VENCIDA há '+Math.abs(diff)+' dias';
+  ddEl.style.color=diff<0?'var(--r)':diff<=30?'#8a5000':'var(--gd)';
+  row.style.background=diff<0?'#fde8e8':diff<=30?'#fffbe0':'';
+  if(mg>0){
+    const sd=new Date(vd); sd.setDate(sd.getDate()-mg);
+    dsEl.textContent=sd.toLocaleDateString('pt-BR');
+    dsEl.style.color=sd<=hoje?'var(--r)':'var(--gy)';
+  } else dsEl.textContent='—';
+}
+
+function savDocs(){
+  const docs={};
+  LICENCAS.forEach((lic,i)=>{
+    docs[lic]={val:document.getElementById('dv'+i).value,
+               mg:document.getElementById('dm'+i).value};
+  });
+  ss('doc',docs); toast('Documentos salvos!');
+}
+
+// ============================================================
+// ESCALA
+// ============================================================
+function inicEscala(){
+  calcDia();
+  if(!document.getElementById('corp-esc').children.length){
+    for(let i=0;i<6;i++) addLinha();
+  }
+}
+
+function novaEscala(){
+  if(!confirm('Iniciar nova escala? Dados não salvos serão perdidos.')) return;
+  document.getElementById('esc-dt').value='';
+  document.getElementById('esc-dia').value='';
+  document.getElementById('esc-obs').value='';
+  document.getElementById('corp-esc').innerHTML='';
+  for(let i=0;i<6;i++) addLinha();
+  toast('Nova escala iniciada!');
+}
+
+function calcDia(){
+  const v=document.getElementById('esc-dt').value;
+  if(!v){ document.getElementById('esc-dia').value=''; return; }
+  const dias=['DOMINGO','SEGUNDA-FEIRA','TERÇA-FEIRA','QUARTA-FEIRA','QUINTA-FEIRA','SEXTA-FEIRA','SÁBADO'];
+  document.getElementById('esc-dia').value=dias[new Date(v+'T00:00:00').getDay()];
+}
+
+function mkDstOpts(){
+  return '<option value=""></option>'+DESTINOS.map(d=>`<option>${d}</option>`).join('');
+}
+
+function addLinha(){
+  const vts=gVTs(); const mots=gMots();
+  const vtO='<option value="">VT</option>'+vts.map(v=>`<option>${v}</option>`).join('');
+  const moO='<option value="">Motorista</option>'+mots.map(m=>`<option>${m}</option>`).join('');
+  const dO=mkDstOpts();
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td>
+      <select style="width:52px;font-size:.78rem" onchange="autoPlaca(this)">${vtO}</select>
+    </td>
+    <td>
+      <input type="text" readonly class="pl-inp"
+        style="width:82px;font-size:.77rem;background:#e8fca0;font-weight:800;
+        color:var(--gd);text-align:center">
+    </td>
+    <td>
+      <select style="width:140px;font-size:.78rem">${moO}</select>
+    </td>
+    <td>
+      <input type="text" style="width:68px;font-size:.78rem;text-align:center" placeholder="00:00">
+    </td>
+    <td>
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <input type="text" style="width:54px;font-size:.77rem;text-align:center" value="1ª">
+        <input type="text" style="width:54px;font-size:.77rem;text-align:center" value="2ª">
+        <input type="text" style="width:54px;font-size:.77rem;text-align:center" value="3ª">
+      </div>
+    </td>
+    <td>
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <input type="text" maxlength="7" style="width:60px;font-size:.77rem;text-align:center" placeholder="OTR 1">
+        <input type="text" maxlength="7" style="width:60px;font-size:.77rem;text-align:center" placeholder="OTR 2">
+        <input type="text" maxlength="7" style="width:60px;font-size:.77rem;text-align:center" placeholder="OTR 3">
+      </div>
+    </td>
+    <td>
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <input type="text" style="width:126px;font-size:.77rem" placeholder="Cliente 1">
+        <input type="text" style="width:126px;font-size:.77rem" placeholder="Cliente 2">
+        <input type="text" style="width:126px;font-size:.77rem" placeholder="Cliente 3">
+      </div>
+    </td>
+    <td>
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <input type="text" maxlength="25" style="width:160px;font-size:.77rem" placeholder="Equipamento 1">
+        <input type="text" maxlength="25" style="width:160px;font-size:.77rem" placeholder="Equipamento 2">
+        <input type="text" maxlength="25" style="width:160px;font-size:.77rem" placeholder="Equipamento 3">
+      </div>
+    </td>
+    <td>
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <select style="width:136px;font-size:.77rem">${dO}</select>
+        <select style="width:136px;font-size:.77rem">${dO}</select>
+        <select style="width:136px;font-size:.77rem">${dO}</select>
+      </div>
+    </td>
+    <td>
+      <textarea maxlength="80" rows="3"
+        style="width:252px;font-size:.77rem;resize:none"
+        placeholder="Obs. (máx. 80 car.)"></textarea>
+    </td>`;
+  document.getElementById('corp-esc').appendChild(tr);
+}
+
+function autoPlaca(sel){
+  const pls=gPls();
+  sel.closest('tr').querySelector('.pl-inp').value=pls[sel.value]||'';
+}
+
+function coletarEsc(){
+  const rows=[];
+  document.querySelectorAll('#corp-esc tr').forEach(tr=>{
+    const all=tr.querySelectorAll('input,select,textarea');
+    rows.push({
+      vt:all[0].value, placa:all[1].value, motorista:all[2].value,
+      horario:all[3].value,
+      viagens:[all[4].value,all[5].value,all[6].value],
+      otrs:[all[7].value,all[8].value,all[9].value],
+      clientes:[all[10].value,all[11].value,all[12].value],
+      equips:[all[13].value,all[14].value,all[15].value],
+      destinos:[all[16].value,all[17].value,all[18].value],
+      obs:all[19].value
+    });
+  });
+  return {
+    dt:document.getElementById('esc-dt').value,
+    dia:document.getElementById('esc-dia').value,
+    obs:document.getElementById('esc-obs').value,
+    rows
+  };
+}
+
+function carregarEsc(e){
+  document.getElementById('esc-dt').value=e.dt||'';
+  document.getElementById('esc-dia').value=e.dia||'';
+  document.getElementById('esc-obs').value=e.obs||'';
+  document.getElementById('corp-esc').innerHTML='';
+  (e.rows||[]).forEach(r=>{
+    addLinha();
+    const tr=document.getElementById('corp-esc').lastChild;
+    const all=tr.querySelectorAll('input,select,textarea');
+    all[0].value=r.vt||''; autoPlaca(all[0]);
+    all[2].value=r.motorista||'';
+    all[3].value=r.horario||'';
+    all[4].value=r.viagens?.[0]||'1ª';
+    all[5].value=r.viagens?.[1]||'2ª';
+    all[6].value=r.viagens?.[2]||'3ª';
+    all[7].value=r.otrs?.[0]||''; all[8].value=r.otrs?.[1]||''; all[9].value=r.otrs?.[2]||'';
+    all[10].value=r.clientes?.[0]||''; all[11].value=r.clientes?.[1]||''; all[12].value=r.clientes?.[2]||'';
+    all[13].value=r.equips?.[0]||''; all[14].value=r.equips?.[1]||''; all[15].value=r.equips?.[2]||'';
+    all[16].value=r.destinos?.[0]||''; all[17].value=r.destinos?.[1]||''; all[18].value=r.destinos?.[2]||'';
+    all[19].value=r.obs||'';
+  });
+}
+
+function savEscala(){
+  const d=coletarEsc();
+  if(!d.dt){ toast('Informe a data da escala','var(--r)'); return; }
+  const escs=gEscs();
+  const i=escs.findIndex(e=>e.dt===d.dt);
+  if(i>=0) escs[i]=d; else escs.push(d);
+  ss('esc',escs); toast('Escala salva!');
+}
+
+// ============================================================
+// PDF ESCALA
+// ============================================================
+function pdfEscala(dados){
+  if(!dados) dados=coletarEsc();
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',format:'a4'});
+  doc.setFontSize(13); doc.text('ATR FILIAL RECIFE – ESCALA',14,12);
+  doc.setFontSize(9);
+  const df=dados.dt?new Date(dados.dt+'T00:00:00').toLocaleDateString('pt-BR'):'';
+  doc.text(`Data: ${df}   ${dados.dia||''}`,14,19);
+
+  const head=[['VT','PLACA','MOTORISTA','HORÁRIO','VIAGEM','OTR','CLIENTE','EQUIPAMENTO','DESTINO','OBS']];
+  const body=(dados.rows||[]).filter(r=>r.vt||r.motorista).map(r=>[
+    r.vt||'', r.placa||'', r.motorista||'', r.horario||'',
+    (r.viagens||[]).filter(Boolean).join('\n')||'',
+    (r.otrs||[]).filter(Boolean).join('\n')||'',
+    (r.clientes||[]).filter(Boolean).join('\n')||'',
+    (r.equips||[]).filter(Boolean).join('\n')||'',
+    (r.destinos||[]).filter(Boolean).join('\n')||'',
+    r.obs||''
+  ]);
+
+  doc.autoTable({
+    startY:23, head, body,
+    styles:{fontSize:7.5,cellPadding:3,overflow:'linebreak'},
+    headStyles:{fillColor:[74,138,8],fontSize:8},
+    columnStyles:{
+      0:{cellWidth:13},  // VT
+      1:{cellWidth:21},  // PLACA
+      2:{cellWidth:34},  // MOTORISTA
+      3:{cellWidth:19},  // HORÁRIO
+      4:{cellWidth:18},  // VIAGEM
+      5:{cellWidth:18},  // OTR
+      6:{cellWidth:30},  // CLIENTE
+      7:{cellWidth:38},  // EQUIPAMENTO
+      8:{cellWidth:32},  // DESTINO
+      9:{cellWidth:50}   // OBS
+    }
+  });
+  if(dados.obs){
+    const y=doc.lastAutoTable.finalY+7;
+    doc.setFontSize(8);
+    doc.text('Observações Gerais: '+dados.obs,14,y,{maxWidth:268});
+  }
+  doc.save('Escala_ATR_'+(df||'sem_data')+'.pdf');
+}
+
+// ============================================================
+// CONSULTA ESCALA
+// ============================================================
+let ESC_SEL=null;
+
+function rndCEsc(){
+  const div=document.getElementById('lista-esc');
+  const list=gEscs().slice().sort((a,b)=>b.dt.localeCompare(a.dt));
+  if(!list.length){
+    div.innerHTML='<div class="fc" style="color:#888">Nenhuma escala salva ainda.</div>';
+    return;
+  }
+  div.innerHTML=list.map((e,i)=>{
+    const df=e.dt?new Date(e.dt+'T00:00:00').toLocaleDateString('pt-BR'):'—';
+    const vts=(e.rows||[]).map(r=>r.vt).filter(Boolean).join(', ');
+    return `<div class="ec" onclick="abrirEsc(${i})">
+      <div>
+        <div class="ei">Escala: ${df} — ${e.dia||''}</div>
+        <div class="es">VTs: ${vts||'—'}</div>
+      </div>
+      <button class="btn br" style="padding:5px 11px;font-size:.78rem"
+        onclick="event.stopPropagation();delEsc(${i})">Excluir</button>
+    </div>`;
+  }).join('');
+}
+
+function abrirEsc(i){
+  const list=gEscs().slice().sort((a,b)=>b.dt.localeCompare(a.dt));
+  ESC_SEL=list[i];
+  const df=ESC_SEL.dt?new Date(ESC_SEL.dt+'T00:00:00').toLocaleDateString('pt-BR'):'—';
+  document.getElementById('mod-esc-info').innerHTML=
+    `<p>Data: <b>${df}</b> — <b>${ESC_SEL.dia||''}</b></p>
+     <p style="margin-top:8px;font-size:.87rem;color:#666">
+       ${(ESC_SEL.rows||[]).filter(r=>r.vt).length} veículo(s) na escala</p>`;
+  document.getElementById('mod-esc').classList.add('on');
+}
+function editEsc(){ fmod('mod-esc'); ir('pg-escala'); setTimeout(()=>carregarEsc(ESC_SEL),120); }
+function pdfEscMod(){ fmod('mod-esc'); pdfEscala(ESC_SEL); }
+function delEsc(i){
+  const list=gEscs().slice().sort((a,b)=>b.dt.localeCompare(a.dt));
+  list.splice(i,1); ss('esc',list); rndCEsc(); toast('Escala excluída.');
+}
+
+// ============================================================
+// MOTORISTAS
+// ============================================================
+function cadMot(){
+  const nm=document.getElementById('nm-n').value.trim();
+  if(!nm) return;
+  const list=gMots();
+  if(list.includes(nm)){ toast('Já cadastrado','var(--y)'); return; }
+  list.push(nm); ss('mo',list);
+  document.getElementById('nm-n').value='';
+  rndMots(); toast('Motorista cadastrado!');
+}
+function rndMots(){
+  const tb=document.getElementById('tb-mots');
+  const list=gMots(); const base=MOTS0.length;
+  tb.innerHTML=list.map((m,i)=>`<tr><td>${m}</td>
+    <td>${i>=base
+      ?`<button class="btn br" style="padding:3px 8px;font-size:.74rem"
+          onclick="rmMot('${m.replace(/'/g,"\\'")}')">Remover</button>`
+      :'<span style="color:#aaa;font-size:.74rem">Padrão</span>'}</td></tr>`).join('');
+}
+function rmMot(nm){ let l=gMots().filter(m=>m!==nm); ss('mo',l); rndMots(); }
+
+// ============================================================
+// VTs
+// ============================================================
+function cadVT(){
+  const nm=document.getElementById('nvt-n').value.trim();
+  if(!nm) return;
+  const list=gVTs();
+  if(list.includes(nm)){ toast('VT já cadastrada','var(--y)'); return; }
+  list.push(nm); ss('vt',list);
+  document.getElementById('nvt-n').value='';
+  rndVTs(); toast('VT cadastrada!');
+}
+function rndVTs(){
+  const tb=document.getElementById('tb-vts');
+  const list=gVTs(); const pls=gPls(); const base=Object.keys(VTP0);
+  tb.innerHTML=list.map(v=>`<tr>
+    <td><b>VT ${v}</b></td><td>${pls[v]||'—'}</td>
+    <td>${!base.includes(v)
+      ?`<button class="btn br" style="padding:3px 8px;font-size:.74rem"
+          onclick="rmVT('${v}')">Remover</button>`
+      :'<span style="color:#aaa;font-size:.74rem">Padrão</span>'}</td></tr>`).join('');
+}
+function rmVT(v){ let l=gVTs().filter(x=>x!==v); ss('vt',l); rndVTs(); }
+
+// ============================================================
+// PLACAS
+// ============================================================
+function cadPlaca(){
+  const vt=document.getElementById('npl-vt').value;
+  const pl=document.getElementById('npl-pl').value.trim();
+  if(!vt||!pl) return;
+  const pls=gPls(); pls[vt]=pl; ss('pl',pls);
+  document.getElementById('npl-pl').value='';
+  rndPlacas(); toast('Placa atualizada!');
+}
+function rndPlacas(){
+  fillSel(document.getElementById('npl-vt'), gVTs());
+  const tb=document.getElementById('tb-placas');
+  const pls=gPls();
+  tb.innerHTML=Object.entries(pls).map(([v,p])=>`<tr>
+    <td><b>VT ${v}</b></td><td>${p}</td>
+    <td><button class="btn bg" style="padding:3px 8px;font-size:.74rem"
+      onclick="document.getElementById('npl-vt').value='${v}';
+               document.getElementById('npl-pl').value='${p}'">Editar</button></td></tr>`).join('');
+}
+</script>
+</body>
+</html>
